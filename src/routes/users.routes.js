@@ -4,14 +4,20 @@
 
 const { Router } = require('express');
 const UsersController = require('../controllers/UsersController');
+const ensureAuthenticated = require('../middleware/ensureAuthenticated');
+
 
 const usersController = new UsersController();
 const usersRoutes = Router();
 
 
-usersRoutes.post("/", usersController.create);
-usersRoutes.put("/:id", usersController.update);
-usersRoutes.delete("/:id", usersController.delete);
+// Create não irá precisar, pois neste momento ele está criando a conta, nem conta ele tem, então não tem o que autenticar
+usersRoutes.post("/", usersController.create); 
+
+//Atualizar o perfil, ele precisa estar autenticado
+// "path", "middleware", "function"
+usersRoutes.put("/", ensureAuthenticated, usersController.update);
+usersRoutes.delete("/:id", ensureAuthenticated, usersController.delete);
 
 // Só que agora eu preciso de alguma forma preciso expor essas minhas rotas pro meu server.js, pois eu tirei as rotas de lá. ENtão preciso expor elas desta forma
 module.exports = usersRoutes; 

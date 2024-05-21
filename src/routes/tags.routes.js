@@ -4,11 +4,14 @@
 
 const { Router } = require('express');
 const TagsController = require('../controllers/TagsController');
+const ensureAuthenticated = require('../middleware/ensureAuthenticated');
+
 
 const tagsRoutes = Router();
 const tagsController = new TagsController();
 
-tagsRoutes.get("/:user_id", tagsController.index);
+
+tagsRoutes.get("/", ensureAuthenticated, tagsController.index);
 
 // Só que agora eu preciso de alguma forma preciso expor essas minhas rotas pro meu server.js, pois eu tirei as rotas de lá. ENtão preciso expor elas desta forma
 module.exports = tagsRoutes; 
