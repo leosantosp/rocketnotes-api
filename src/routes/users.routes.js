@@ -4,11 +4,13 @@
 
 const { Router } = require('express');
 const UsersController = require('../controllers/UsersController');
+const UserAvatarController = require('../controllers/UserAvatarController');
 const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 const multer = require('multer');
 const uploadConfig = require('../configs/upload');
 
 const usersController = new UsersController();
+const userAvatarController = new UserAvatarController();
 const usersRoutes = Router();
 
 const upload = multer(uploadConfig.MULTER);
@@ -22,10 +24,7 @@ usersRoutes.put("/", ensureAuthenticated, usersController.update);
 usersRoutes.delete("/:id", ensureAuthenticated, usersController.delete);
 
                                                             // nome do campo que receberá esse arquivo
-usersRoutes.patch("/avatar", ensureAuthenticated, upload.single('avatar'), (req, res) => {
-    console.log(req.file.filename);
-    res.json();
-}); // O patch é utilizado para atualizar um campo específico
+usersRoutes.patch("/avatar", ensureAuthenticated, upload.single('avatar'), userAvatarController.update);
 
 // Só que agora eu preciso de alguma forma preciso expor essas minhas rotas pro meu server.js, pois eu tirei as rotas de lá. ENtão preciso expor elas desta forma
 module.exports = usersRoutes; 
