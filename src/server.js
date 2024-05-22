@@ -5,8 +5,9 @@ const express = require("express");
 const routes = require("./routes");
 const uploadConfig = require('./configs/upload');
 migrationsRun();
-
+const cors = require("cors"); // Importação do cors
 const app = express();
+app.use(cors()); // Acionando a função dentro das rotas
 app.use(express.json());
 
 // Criar ants das rotas
